@@ -2,93 +2,45 @@ use std::io;
 
 fn main() {
 
-    // input 
+    println!("Enter a string for conversion");
 
-    let mut input = String::new();
-
-    io::stdin().read_line(&mut input).expect("could not input string");
-
-    let input = input.trim();
-
-
-    // output
-
-    let out = pl(input.to_string());
-
-    println!("{}", out);
+    // create string from input
+    let mut arg = String::new();
+    io::stdin().read_line(&mut arg).expect("invalid input");
+  
+    // print result
+    println!("{}", pl_cc(arg.trim().to_string()));
 }
 
-pub fn pl(input: String) -> String {
 
-    // vowels 
+fn pl_cc(mut arg: String) -> String {
+
+    // vowel list for iterating
     let vowel = vec!['a', 'e', 'i', 'o', 'u'];
 
-    // first 3 characters 
-    let char1 = input.chars().nth(0).unwrap();
-    let char2 = input.chars().nth(1).unwrap();
-    let char3 = input.chars().nth(2).unwrap();
-    
+    // exceptions 
+    if arg.len() < 3 {
+        return "invalid string, minimum length of 3 chars".to_string();
+    };
 
-    // initalizing tye variable 
-    let mut tye = 0;
+    // defines first and second character
+    let (c1, c2) = ( arg.chars().nth(0).unwrap(), arg.chars().nth(1).unwrap());
 
-    // determines if the string is type one two or three
-
+    let mut tye = (false, false);
+   
     for x in 0..vowel.len() {
-
-        if char1 == vowel[x] {
-            tye = 3;
-        
-        }else if char2 == vowel[x] {
-            tye = 1;
-
-        }else if char3 == vowel[x] {
-            tye = 2;
-    
-        };
-
+        if c1 == vowel[x] { tye.0 = true};
+        if c2 == vowel[x] { tye.1 = true};
     };
 
-    println!("{}", tye);
-    // sends type and the input string to the converter
-    return convert(input, tye)
-}
-
-pub fn convert(input: String, tye: i32) -> String {
-
-    // initalizing first and second variable
-    // piglatin words are split into three parts, the two that are switched around and a suffix at
-    // the end
-    let mut first = String::new();
-    let mut second = String::new();
-
-    // based on the type specified, the algorithim manipulates the string to convert it to piglatin
-    if tye == 1 {
-
-        for x in 0..input.chars().count() - 1 {
-            first = first + &(input.chars().nth(x + 1).unwrap().to_string());
-        };
-        second = input.chars().nth(0).unwrap().to_string();
-
-        return first + &second + "ay";
-
-
-    }else if tye == 2 {
-         for x in 0..input.chars().count() -2  {
-            first = first + &(input.chars().nth(x + 2).unwrap().to_string());
-        };
-        second = input.chars().nth(0).unwrap().to_string() + &input.chars().nth(1).unwrap().to_string();
-
-        return first + &second + "ay";
-
-
-    }else if tye == 3 {
-       
-        let returner = input + "yay";
-        return returner
-
-    }else {
-        
-        return "invalid type".to_string()
+    let latin = match tye {
+        // type one 
+        (false, true) => { arg.remove(0);  format!("{}{}", (arg), c1)},
+        // type two
+        (false, false)   => { arg.remove(0);arg.remove(0); format!("{}{}{}", arg, c1, c2)},
+        // type 3
+        (_, _) => {arg},
     };
+
+    format!("{latin}ay")
 }
