@@ -1,7 +1,7 @@
 # Pig-Latin-Converter
-A blazingly fast :rocket_emoji: program that does nothing useful
+A blazingly fast :rocket::rocket::rocket::rocket: program that does nothing useful
 
-### downloading
+### Download
 ```bash
 git clone https://github.com/toastxc/Pig-Latin-Converter.git
 cd Pig-Latin-Converter
